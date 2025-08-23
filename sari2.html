@@ -89,7 +89,7 @@
 <body>
 
     <!-- Botón para iniciar todo -->
-    <button class="boton" id="playButton">🎵 Reproducir música y animación 🎵</button>
+    <button class="boton" id="playButton">🎵 Reproducir música 🎵</button>
 
     <!-- Música -->
     <audio id="musica" loop>
@@ -102,9 +102,9 @@
     <h1>Para tu cumpleaños mi Sari preciosa ❤️ te amo</h1>
 
     <!-- Botones de interacción -->
-    <button class="boton" onclick="clickMagico(1)">Dale</button>
-    <button class="boton" onclick="clickMagico(2)">Otra página</button>
-    <button class="boton" onclick="clickMagico(3)">Te amo</button>
+    <button class="boton" onclick="clickMagico(1)">Llorar por lo que te hace llorar</button>
+    <button class="boton" onclick="clickMagico(2)">Ser música de la que prefieres</button>
+    <button class="boton" onclick="clickMagico(3)">Y que nunca me quieras pausar</button>
 
     <!-- Mensajes -->
     <div id="mensaje1" class="mensaje">
@@ -123,14 +123,14 @@
         Porque contigo lo sabía<br>
         Que tú y yo vamos por la milla 🏃‍♂️🏃‍♀️<br>
         Y que siempre voy a querer saber si va bien todo en tu día 🌞<br>
-        ¿Qué tal va tu día?<br>
+        ¿Qué tal va tu día mi vida?<br>
         Es lo que me importa, mi vida ❤️<br>
         Si vamos tarde por tu culpa jajaja, decir que es la mía... casi siempre será la mía 😅
     </div>
 
     <div id="mensaje3" class="mensaje">
         Te amo mi Sari hermosa ❤️<br>
-        Mi futura esposa 💍🥰
+        Mi futura esposa 💍🥰 me siento muy feliz de compartir esta vida contigo 
     </div>
 
     <div class="gatos">🎂🐱🎉🐱🎂🐱🎊🐱🎂🐱🎈🐱🎂🐱🎁🐱</div>
@@ -162,7 +162,7 @@
         }
 
         // Contador hacia el cumpleaños
-        const fechaCumple = new Date("2025-08-30T00:00:00").getTime();
+        const fechaCumple = new Date("2025-08-29T00:00:00").getTime();
         setInterval(() => {
             const ahora = Date.now();
             const d = fechaCumple - ahora;
