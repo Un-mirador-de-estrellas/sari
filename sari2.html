@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Para mi Sari preciosa ❤️</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+            display: flex; justify-content: center;
+            align-items: center; flex-direction: column;
+            height: 100vh;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            text-align: center; overflow: hidden;
+            position: relative;
+        }
+
+        h1, p { color: #fff; margin: 10px; z-index: 2; }
+
+        .corazon {
+            width:100px; height:100px; background:red;
+            position:relative; transform:rotate(-45deg);
+            animation: latir 1s infinite; margin:20px auto; z-index: 2;
+            display: none; /* Oculto hasta que se presione el botón */
+        }
+        .corazon::before, .corazon::after {
+            content:""; width:100px; height:100px; background:red;
+            border-radius:50%; position:absolute;
+        }
+        .corazon::before { top:-50px; left:0; }
+        .corazon::after { top:0; left:50px; }
+        @keyframes latir {
+            0% { transform: scale(1) rotate(-45deg); }
+            50% { transform: scale(1.2) rotate(-45deg); }
+            100% { transform: scale(1) rotate(-45deg); }
+        }
+
+        .mensaje {
+            display:none; margin:20px;
+            font-size:20px; color:#fff;
+            z-index: 2; animation: bailar 1s infinite alternate;
+        }
+        @keyframes bailar {
+            0% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-5px) rotate(2deg); }
+            100% { transform: translateY(0) rotate(-2deg); }
+        }
+
+        .boton {
+            background: #ff69b4; border: none;
+            padding: 12px 20px; margin: 10px;
+            color: white; border-radius: 10px;
+            cursor: pointer; font-size: 16px;
+            transition: transform 0.3s; z-index: 2;
+        }
+        .boton:hover { transform: scale(1.1); }
+
+        .gatos {
+            position: absolute; bottom: 0; width: 100%;
+            text-align: center; font-size: 30px;
+            animation: subir 4s infinite alternate; z-index: 2;
+        }
+        @keyframes subir {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+
+        .contador { font-size: 22px; color: #fff; margin: 10px; z-index: 2; }
+
+        .corazon-fall {
+            position: absolute; font-size: 20px; color: red;
+            animation: caer 5s linear infinite;
+        }
+        @keyframes caer {
+            0% { transform: translateY(-50px); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .flash-gatito {
+            position: absolute; font-size: 40px;
+            animation: flash 0.5s ease-out forwards; z-index: 3;
+        }
+        @keyframes flash {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(2); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón para iniciar todo -->
+    <button class="boton" id="playButton">🎵 Reproducir música y animación 🎵</button>
+
+    <!-- Música -->
+    <audio id="musica" loop>
+        <source src="https://drive.google.com/uc?export=download&id=1y9D2lmtWfj5-4uyKKZzp7LjGEZXvw2Pg" type="audio/mpeg">
+    </audio>
+
+    <div class="corazon"></div>
+    <h1>Solo faltan:</h1>
+    <div id="contador" class="contador"></div>
+    <h1>Para tu cumpleaños mi Sari preciosa ❤️ te amo</h1>
+
+    <!-- Botones de interacción -->
+    <button class="boton" onclick="clickMagico(1)">Dale</button>
+    <button class="boton" onclick="clickMagico(2)">Otra página</button>
+    <button class="boton" onclick="clickMagico(3)">Te amo</button>
+
+    <!-- Mensajes -->
+    <div id="mensaje1" class="mensaje">
+        Dale abrazame otro rato ❤️<br>
+        Llevaba tiempo buscando a quien cantarle sobre cuando me siento vulnerable...<br>
+        Apapáchame la vida entera mi Sari 😊
+    </div>
+
+    <div id="mensaje2" class="mensaje">
+        No me da miedo admitir que...<br>
+        Desde la primera vez que te vi<br>
+        Yo ya me lo veía venir<br>
+        Estar all in por ti mi Sari ❤️<br>
+        Porque yo ya sabía a lo que iba<br>
+        Querer comprarnos un terreno y construirnos la vida 🏡<br>
+        Porque contigo lo sabía<br>
+        Que tú y yo vamos por la milla 🏃‍♂️🏃‍♀️<br>
+        Y que siempre voy a querer saber si va bien todo en tu día 🌞<br>
+        ¿Qué tal va tu día?<br>
+        Es lo que me importa, mi vida ❤️<br>
+        Si vamos tarde por tu culpa jajaja, decir que es la mía... casi siempre será la mía 😅
+    </div>
+
+    <div id="mensaje3" class="mensaje">
+        Te amo mi Sari hermosa ❤️<br>
+        Mi futura esposa 💍🥰
+    </div>
+
+    <div class="gatos">🎂🐱🎉🐱🎂🐱🎊🐱🎂🐱🎈🐱🎂🐱🎁🐱</div>
+
+    <script>
+        // Botón principal para iniciar música y animaciones
+        document.getElementById("playButton").addEventListener("click", function() {
+            const audio = document.getElementById("musica");
+            audio.play(); // Reproduce la música
+            this.style.display = "none"; // Oculta el botón
+            document.querySelector(".corazon").style.display = "block"; // Muestra el corazón
+        });
+
+        // Mostrar mensajes y gatitos
+        function clickMagico(num) {
+            document.querySelectorAll('.mensaje').forEach(m => m.style.display = 'none');
+            document.getElementById('mensaje' + num).style.display = 'block';
+            crearFlashGato();
+        }
+
+        function crearFlashGato() {
+            const gato = document.createElement("div");
+            gato.innerText = "🐱";
+            gato.classList.add("flash-gatito");
+            gato.style.left = Math.random() * (window.innerWidth - 50) + "px";
+            gato.style.top = Math.random() * (window.innerHeight - 50) + "px";
+            document.body.appendChild(gato);
+            setTimeout(() => gato.remove(), 500);
+        }
+
+        // Contador hacia el cumpleaños
+        const fechaCumple = new Date("2025-08-30T00:00:00").getTime();
+        setInterval(() => {
+            const ahora = Date.now();
+            const d = fechaCumple - ahora;
+            const dias = Math.floor(d / (1000*60*60*24));
+            const horas = Math.floor((d % (1000*60*60*24)) / (1000*60*60));
+            const min = Math.floor((d % (1000*60*60)) / (1000*60));
+            const seg = Math.floor((d % (1000*60)) / 1000);
+            document.getElementById("contador").textContent = `${dias}d ${horas}h ${min}m ${seg}s`;
+        }, 1000);
+
+        // Corazones cayendo
+        function crearCorazon() {
+            const c = document.createElement("div");
+            c.innerText = "❤️";
+            c.classList.add("corazon-fall");
+            c.style.left = Math.random() * window.innerWidth + "px";
+            c.style.fontSize = `${20 + Math.random()*20}px`;
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 5000);
+        }
+        setInterval(crearCorazon, 500);
+    </script>
+
+</body>
+</html>
+
