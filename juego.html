@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te amo Mi Sari preciosa si consigues 300 puntos te dare una sorpresa</title>
+    <style>
+        body { margin: 0; background: #ffe6e6; font-family: sans-serif; overflow: hidden; text-align: center; }
+        #gameCanvas { border: 2px solid #ff4d6d; display: block; margin: 20px auto; background: #fff0f5; }
+        #ui, #rules { margin: 10px; }
+        .button { background: #ff4d6d; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 10px; cursor: pointer; }
+        .button:hover { background: #e63e5e; }
+        #secretMsg { color: #ff1a4d; font-weight: bold; font-size: 22px; margin-top: 10px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; }
+        #topInfo { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); display: flex; justify-content: space-between; width: 80%; font-weight: bold; }
+        #overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; }
+    </style>
+</head>
+<body>
+    <h1>Te amo Mi Sari preciosa si consigues 300 puntos te dare una sorpresa</h1>
+    <div id="rules">
+        <p>Reglas del juego:</p>
+        <ul>
+            <li>los gatitos 🐱 suman 5 puntos y los ❤️ suman 2 puntos.</li>
+            <li>Evita las 💣 o perderás puntos mi vida.</li>
+            <li>🥤 los frappes te dan el poder hacerlo mas lento.</li>
+            <li>💖 limpia el 25% de las bombas.</li>
+            <li>⏰ agrega 5 segundos al tiempo.</li>
+            <li>Cada 25 puntos aparecerán más bombas.</li>
+            <li>Cada 30 puntos aumenta la velocidad.</li>
+            <li>Tienes 45 segundos para hacer el mayor puntaje posible surte mi sari</li>
+        </ul>
+        <button class="button" onclick="startGame()">Iniciar Juego</button>
+    </div>
+    <div id="topInfo">
+        <span id="score">Puntaje: 0</span>
+        <span id="timer">Tiempo restante: 45</span>
+        <span id="highScore">Récord: 0</span>
+    </div>
+    <canvas id="gameCanvas" width="500" height="500"></canvas>
+    <p id="message"></p>
+    <p id="secretMsg"></p>
+    <div id="overlay"></div>
+
+    <!-- 🎵 Aquí ponemos el reproductor oculto -->
+    <audio id="bgMusic" loop>
+        <source src="https://raw.githubusercontent.com/usuario/repositorio/rama/pista2.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const highScoreDisplay = document.getElementById('highScore');
+        const messageDisplay = document.getElementById('message');
+        const secretMsg = document.getElementById('secretMsg');
+        const timerDisplay = document.getElementById('timer');
+        const overlay = document.getElementById('overlay');
+        const rulesDiv = document.getElementById('rules');
+        const bgMusic = document.getElementById('bgMusic');
+
+        let objects = [];
+        let score = 0;
+        let highScore = localStorage.getItem('highScore') || 0;
+        highScoreDisplay.innerText = `Récord: ${highScore}`;
+        let timeLeft = 45;
+        let gameInterval;
+        let spawnInterval;
+        let speed = 2;
+        let gameActive = false;
+        let lastDarkenScore = 0;
+
+        let bombMultiplier = 1; 
+        let lastBombIncrease = 0;
+        let lastSpeedIncrease = 0;
+
+        const types = [
+            { emoji: '❤️', points: 2 },
+            { emoji: '🐱', points: 5 },
+            { emoji: '💣', points: -10 },
+            { emoji: '🥤', power: 'slow' },
+            { emoji: '💖', power: 'clean', points: 5 },
+            { emoji: '⏰', power: 'time', points: 0 }
+        ];
+
+        const romanticMessages = [
+            "Mi Sari, eres la mejor mujer que alguien puede desear 💕",
+            "si consigues 100 puntos te dare una buena acomodada😘",
+            "solo tu y solo tu eres dueña de mi corazon 💖",
+            "ten te doy una flor 🌹",
+            "te amo mi sari 💞"
+        ];
+
+        function startGame() {
+            // 🔊 Reproducir música al iniciar
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+
+            rulesDiv.style.display = 'none';
+            score = 0;
+            timeLeft = 45;
+            speed = 2;
+            bombMultiplier = 1;
+            objects = [];
+            gameActive = true;
+            messageDisplay.innerText = '';
+            secretMsg.innerText = '';
+            secretMsg.style.display = 'none';
+            lastDarkenScore = 0;
+            lastBombIncrease = 0;
+            lastSpeedIncrease = 0;
+            clearInterval(gameInterval);
+            clearInterval(spawnInterval);
+            gameInterval = setInterval(updateGame, 50);
+            spawnInterval = setInterval(spawnObject, 800);
+        }
+
+        function spawnObject() {
+            const type = types[Math.floor(Math.random() * types.length)];
+            const x = Math.random() * (canvas.width - 30);
+            objects.push({ x, y: 0, type });
+
+            if (type.emoji === '💣') {
+                for (let i = 1; i < bombMultiplier; i++) {
+                    const xExtra = Math.random() * (canvas.width - 30);
+                    objects.push({ x: xExtra, y: 0, type: { emoji: '💣', points: -10 } });
+                }
+            }
+        }
+
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            objects.forEach((obj, i) => {
+                obj.y += speed;
+                ctx.font = '24px Arial';
+                ctx.fillText(obj.type.emoji, obj.x, obj.y);
+                if (obj.y > canvas.height) objects.splice(i, 1);
+            });
+
+            timerDisplay.innerText = `Tiempo restante: ${Math.max(0, timeLeft.toFixed(1))}`;
+            if (timeLeft > 0) timeLeft -= 0.05;
+            else endGame();
+
+            if (score >= lastBombIncrease + 25) {
+                bombMultiplier++;
+                lastBombIncrease = score - (score % 25);
+            }
+
+            if (score >= lastSpeedIncrease + 30) {
+                speed += 0.5;
+                lastSpeedIncrease = score - (score % 30);
+            }
+
+            if (score >= lastDarkenScore + 50) {
+                darkenScreen();
+                lastDarkenScore = score - (score % 50);
+            }
+
+            scoreDisplay.innerText = `Puntaje: ${score}`;
+        }
+
+        function darkenScreen() {
+            let flashes = 0;
+            let interval = setInterval(() => {
+                overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+                flashes++;
+                if (flashes >= 10) {
+                    overlay.style.display = 'none';
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+
+        canvas.addEventListener('click', e => {
+            if (!gameActive) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            objects.forEach((obj, i) => {
+                if (x > obj.x && x < obj.x + 24 && y > obj.y - 24 && y < obj.y) {
+                    if (obj.type.points) score += obj.type.points;
+                    if (obj.type.power) applyPower(obj.type.power);
+                    objects.splice(i, 1);
+                    if (score % 50 === 0) showSecretMsg();
+                }
+            });
+        });
+
+        function applyPower(power) {
+            if (power === 'slow') {
+                speed = Math.max(1, speed - 1); 
+                setTimeout(() => speed += 1, 3000);
+            } else if (power === 'clean') {
+                let bombs = objects.filter(o => o.type.emoji === '💣');
+                let removeCount = Math.floor(bombs.length * 0.25);
+                for (let i = 0; i < removeCount; i++) {
+                    let index = objects.findIndex(o => o.type.emoji === '💣');
+                    if (index !== -1) objects.splice(index, 1);
+                }
+                score += 5;
+            }
+        }
+
+        function showSecretMsg() {
+            const msg = romanticMessages[Math.floor(Math.random() * romanticMessages.length)];
+            secretMsg.innerText = msg;
+            secretMsg.style.display = 'block';
+            setTimeout(() => secretMsg.style.display = 'none', 2000);
+        }
+
+        function endGame() {
+            clearInterval(gameInterval);
+            clearInterval(spawnInterval);
+            gameActive = false;
+            bgMusic.pause(); // 🔇 parar música al terminar
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('highScore', highScore);
+            }
+            highScoreDisplay.innerText = `Récord: ${highScore}`;
+            messageDisplay.innerText = score > highScore ? '¡Nuevo récord! 🎉' : 'Fin del juego 💌';
+        }
+    </script>
+</body>
+</html>
+
