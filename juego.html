@@ -26,6 +26,7 @@
             <li>mmmm quisiera metertela y escucharte gemir lento </li>
             <li>💖 limpia el 25% de las bombas.</li>
             <li>⏰ agrega 5 segundos al tiempo.</li>
+            <li>🎁 te da un mensaje romántico sorpresa.</li>
             <li>te extraño mucho mi sari</li>
             <li>Tienes 45 segundos para hacer el mayor puntaje posible surte mi sari</li>
         </ul>
@@ -41,7 +42,7 @@
     <p id="secretMsg"></p>
     <div id="overlay"></div>
 
-    <!-- 🎵 Aquí ponemos el reproductor oculto -->
+    <!-- 🎵 Reproductor oculto -->
     <audio id="bgMusic" loop>
         <source src="https://raw.githubusercontent.com/Un-mirador-de-estrellas/sari/main/pista2.mp3" type="audio/mpeg">
     </audio>
@@ -79,7 +80,8 @@
             { emoji: '💣', points: -10 },
             { emoji: '🥤', power: 'slow' },
             { emoji: '💖', power: 'clean', points: 5 },
-            { emoji: '⏰', power: 'time', points: 0 }
+            { emoji: '⏰', power: 'time', points: 0 },
+            { emoji: '🎁', power: 'gift' }
         ];
 
         const romanticMessages = [
@@ -91,7 +93,6 @@
         ];
 
         function startGame() {
-            // 🔊 Reproducir música al iniciar
             bgMusic.currentTime = 0;
             bgMusic.play();
 
@@ -182,7 +183,6 @@
                     if (obj.type.points) score += obj.type.points;
                     if (obj.type.power) applyPower(obj.type.power);
                     objects.splice(i, 1);
-                    if (score % 50 === 0) showSecretMsg();
                 }
             });
         });
@@ -199,6 +199,10 @@
                     if (index !== -1) objects.splice(index, 1);
                 }
                 score += 5;
+            } else if (power === 'time') {
+                timeLeft += 5; // ⏰ agrega 5 segundos
+            } else if (power === 'gift') {
+                showSecretMsg(); // 🎁 muestra mensaje romántico
             }
         }
 
@@ -213,7 +217,7 @@
             clearInterval(gameInterval);
             clearInterval(spawnInterval);
             gameActive = false;
-            bgMusic.pause(); // 🔇 parar música al terminar
+            bgMusic.pause();
             if (score > highScore) {
                 highScore = score;
                 localStorage.setItem('highScore', highScore);
@@ -224,4 +228,3 @@
     </script>
 </body>
 </html>
-
