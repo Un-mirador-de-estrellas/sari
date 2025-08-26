@@ -105,6 +105,8 @@
     <button class="boton" onclick="clickMagico(1)">Llorar por lo que te hace llorar</button>
     <button class="boton" onclick="clickMagico(2)">Ser música de la que prefieres</button>
     <button class="boton" onclick="clickMagico(3)">Y que nunca me quieras pausar</button>
+    <!-- Botón para ir al juego -->
+    <button class="boton" id="jugarButton">🎮 Jugar 🎮</button>
 
     <!-- Mensajes -->
     <div id="mensaje1" class="mensaje">
@@ -142,6 +144,11 @@
             audio.play(); // Reproduce la música
             this.style.display = "none"; // Oculta el botón
             document.querySelector(".corazon").style.display = "block"; // Muestra el corazón
+        });
+
+ // Redirigir al juego en GitHub
+        document.getElementById("jugarButton").addEventListener("click", function() {
+            window.location.href = "https://TU-USUARIO.github.io/TU-REPO/juego.html";
         });
 
         // Mostrar mensajes y gatitos
@@ -188,4 +195,3 @@
 
 </body>
 </html>
-
